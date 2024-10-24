@@ -1,0 +1,72 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: a0f10bd007c14d1eaf3c673198868be6
+      template: 'QNAP QVR Pro Template'
+      name: 'QNAP QVR Pro Template'
+      description: 'A simple check to ensure the QVR process is still running on a system .'
+      groups:
+        - name: Templates/Applications
+      items:
+        - uuid: 5460c1bac7874ce2b96dfbfe1c7792c8
+          name: 'Get device data'
+          type: HTTP_AGENT
+          key: qvr.get_data
+          delay: 5m
+          history: '0'
+          value_type: TEXT
+          trends: '0'
+          url: 'https://{$QVR_HOST}/qvrpro/'
+          query_fields:
+            - name: group
+              value: '0'
+          status_codes: '200, 404'
+          retrieve_mode: BOTH
+          tags:
+            - tag: Application
+              value: QVR
+        - uuid: 6ce434db5b164c0a92996a658fbead78
+          name: 'QVR Service Alive'
+          type: DEPENDENT
+          key: service.alive
+          delay: '0'
+          description: 'Check for a value of 200 to report back as OK.'
+          valuemap:
+            name: 'Service Alive'
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - 'HTTP\/\d(?:\.\d)?\s(\d{3})'
+                - \1
+          master_item:
+            key: qvr.get_data
+          tags:
+            - tag: Application
+              value: QVR
+          triggers:
+            - uuid: c38ecd12b410489dba105d0707d10e5c
+              expression: 'last(/QNAP QVR Pro Template/service.alive)<>200'
+              name: 'QVR Service Offline'
+              priority: HIGH
+              description: 'An alert to inform that the QVR Service is down.'
+      macros:
+        - macro: '{$QVR_HOST}'
+          value: '<Enter IP or Hostname>'
+          description: 'Hostname of the QVR'
+      valuemaps:
+        - uuid: 50012f3724724e1682c393916f563b4b
+          name: 'Service Alive'
+          mappings:
+            - value: '200'
+              newvalue: UP
+            - value: '404'
+              newvalue: Down
+            - value: '400'
+              newvalue: 'Bad Request'
+            - value: '401'
+              newvalue: Unauthorized
+            - value: '403'
+              newvalue: Forbidden
