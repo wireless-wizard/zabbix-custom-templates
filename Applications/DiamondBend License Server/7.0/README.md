@@ -23,3 +23,15 @@ If you wish to see new items added please open an issue @ [wireless-wizard/zabbi
 |Name|Description|Expression|Priority|
 |----|-----------|----------|--------|
 |DiamondBend Service Offline|<p>Alert the admins to restart the service.</p>|<p>**Expression**: last(/DBQ DiamondBend Check/CheckDiamondBendProessZabbix,#3)=0</p><p>**Recovery expression**: </p>|High|
+
+## Installation
+
+First import the template.
+
+Then you will need to create a UserPerameter in the Zabbix agent config file for this to work.  I personally used the following UserPerameter in the zabbix_agent2.conf file:
+
+```
+UserParameter=CheckDiamondBendProessZabbix,powershell -NoProfile -ExecutionPolicy bypass -File "C:\zabbix-agent-scripts\CheckDiamondBendProessZabbix.ps1"
+```
+
+For more details regarding UserParameteres look at the Zabbix Documentation: https://www.zabbix.com/documentation/current/en/manual/config/items/userparameters
