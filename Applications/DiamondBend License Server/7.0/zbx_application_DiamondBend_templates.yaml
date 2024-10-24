@@ -1,0 +1,40 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: 36c5bfbeecef401c96872f9e07baf6b3
+      template: 'DiamondBend Check'
+      name: 'DiamondBend Check'
+      description: 'Zabbix template to monitor the DiamondBend License Manager.'
+      groups:
+        - name: Templates/Applications
+      items:
+        - uuid: 42177c32565b4404af68be90d7e425ac
+          name: 'Check DiamondBend Process'
+          key: CheckDiamondBendProessZabbix
+          description: 'Pull DiadmondBend status via a PowerShell Item on the Zabbix Agent UserParameter.'
+          valuemap:
+            name: Status
+          timeout: 30s
+          tags:
+            - tag: component
+              value: diamondbend
+          triggers:
+            - uuid: 5496dccd282d45b6a28c053502aa0c77
+              expression: 'last(/DBQ DiamondBend Check/CheckDiamondBendProessZabbix,#3)=0'
+              name: 'DiamondBend Service Offline'
+              priority: HIGH
+              description: 'Alert the admins to restart the service.'
+      tags:
+        - tag: class
+          value: application
+      valuemaps:
+        - uuid: 1b624678736c4558b51f9950c1a3f0ba
+          name: Status
+          mappings:
+            - value: '1'
+              newvalue: Up
+            - value: '0'
+              newvalue: Down
