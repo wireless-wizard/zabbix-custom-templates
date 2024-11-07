@@ -1,0 +1,54 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: c1f6300d8f0a46d3a1fe039e3f585dc4
+      template: 'Windows TCM Server Check'
+      name: 'Windows TCM Server Check'
+      description: 'To track changes with TCM to provide better service.'
+      groups:
+        - name: Templates/Applications
+      items:
+        - uuid: 8b42bd774d7142329ce4a5d8110babdd
+          name: CheckTCMSchedulerCrash
+          key: CheckTCMSchedulerCrash
+          delay: 1h
+          timeout: 10s
+          tags:
+            - tag: component
+              value: 'Workwise TCM'
+          triggers:
+            - uuid: e6f17dd58947435e93a274e21d68bf3b
+              expression: 'last(/Windows TCM Server Check/CheckTCMSchedulerCrash,#1)>0'
+              name: 'Log Greater than 500 Mb (TCM Scheduler Crash Detected)'
+              url_name: 'Detailed History'
+              url: 'URLPathToItem'
+              priority: HIGH
+              description: |
+                C:\Users\[LoggedInUser]\AppData\Roaming\WorkWiseInc\TCM\V10.2\Log\
+                
+                Has a file grater than 500 Mb could be a crash of the TCM Scheduler process. Investigation needed.
+              manual_close: 'YES'
+            - uuid: 64a6b64a16b6473791cb118c34282387
+              expression: 'last(/Windows TCM Server Check/CheckTCMSchedulerCrash,#1)>1'
+              name: 'Log Greater than 500 Mb (TCM Scheduler Crash Detected L2)'
+              url_name: 'Detailed History'
+              url: 'URLPathToItem'
+              priority: DISASTER
+              description: |
+                C:\Users\[LoggedInUser]\AppData\Roaming\WorkWiseInc\TCM\V10.2\Log\
+                
+                Has a file grater than 500 Mb could be a crash of the TCM Scheduler process. Investigation needed.
+              manual_close: 'YES'
+        - uuid: 6bee542c939a4bfb81e0ce913addef35
+          name: CheckTCMSchedulerCrashDetail
+          key: CheckTCMSchedulerCrashDetail
+          delay: 1h
+          history: 10d
+          value_type: LOG
+          trends: '0'
+          tags:
+            - tag: component
+              value: 'Workwise TCM'
