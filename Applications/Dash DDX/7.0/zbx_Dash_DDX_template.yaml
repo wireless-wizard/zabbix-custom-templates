@@ -1,0 +1,65 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: 86c54a3ef16f4965ae4d12582bbffd4b
+      template: 'Windows Dash DDX Check'
+      name: 'Windows Dash DDX Check'
+      description: 'Dubuque Stamp Custom template to monitor the DDX service.'
+      groups:
+        - name: Templates
+        - name: Templates/Applications
+      items:
+        - uuid: e82cf5d18cb74e02a4f8c35a6dd3c82d
+          name: 'DDX Service running'
+          type: ZABBIX_ACTIVE
+          key: CheckDDXProcessZabbix
+          value_type: FLOAT
+          valuemap:
+            name: 'DDX Service Check'
+          timeout: 30s
+          triggers:
+            - uuid: b23367235eac47638fcbd32aa178b8e7
+              expression: 'avg(/Windows Dash DDX Check/CheckDDXProcessZabbix,4:now-3m)=0'
+              name: 'DDX Process Not running'
+              priority: DISASTER
+        - uuid: 30c69910d7754af29f6f7dcde2c8ed2f
+          name: 'Count Files In DDX Queue'
+          type: ZABBIX_ACTIVE
+          key: CountFilesInDDXQueue
+          delay: '1s;1s/1-5,05:00-16:00;5m/1-7,00:00-05:00;5m/1-7,16:00-23:59'
+          history: 10d
+          value_type: FLOAT
+          description: 'Monitor how many DDX files are in the queue.  Numbers likely to fluctuate quite a bit.'
+          timeout: 30s
+        - uuid: fd4786fba52b4631a1c304d32284f838
+          name: 'Oldest File in Queue'
+          type: ZABBIX_ACTIVE
+          key: DDXOldestFileDate
+          delay: 30s
+          description: 'Run a check on the oldest file name in the DDX inbound to detect if the service has failed.'
+          timeout: '30'
+          triggers:
+            - uuid: 5922069031854c3592146bca8a28d7e4
+              expression: 'sum(/Windows Dash DDX Check/DDXOldestFileDate,#6)>=6'
+              name: 'Files stuck in DDX queue'
+              priority: HIGH
+      tags:
+        - tag: class
+          value: application
+        - tag: component
+          value: ddx
+        - tag: target
+          value: windows
+      valuemaps:
+        - uuid: ab9777f951694945b744791e9cc24d95
+          name: 'DDX Service Check'
+          mappings:
+            - value: '1'
+              newvalue: Up
+            - value: '0'
+              newvalue: Down
