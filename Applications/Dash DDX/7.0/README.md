@@ -60,6 +60,9 @@ Description:
 Restart the DDX Router service if it detects a hang in file processing.
 ```
 
+Should look like the following:
+![Restart Script](RestartScript.PNG)
+
 I found by calling a Scheduled Task the user setup works much better.
 
 
@@ -75,6 +78,7 @@ Conditions:
 |Trigger|Equals|<p>Template - Windows Dash DDX Check:Files stuck in DDX queue</p>|
 |Problem is suppressed|No||
 
+![Trigger Operation #1](TriggerActionOperations1.PNG)
 Operations:
 	Run script "Restart DDX Process" on current host (Start ImmedaDuration 9 mintues)
 	Send message to users: whoever you want to see this notification. 
