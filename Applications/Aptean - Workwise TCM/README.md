@@ -2,6 +2,8 @@
 
 This template is for monitoring critical TCM services spicificly TCM 10.2 to keep the server operational.  I personally run into a number of situations where monitoring was required for a few areas and not monitoring them has caused major issues when using this product.
 
+Created for Zabbix 7.0 and up.
+
 ## Items collected
 
 |Name|Description|Type|Key and additional info|
