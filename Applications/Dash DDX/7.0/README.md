@@ -51,10 +51,14 @@ Name: Restart DDX process
 Scope: Action Operation
 Type: Script
 Execute on: Zabbix Agent
-Command:```
+Command:
+```
 powershell -NoProfile -ExecutionPolicy bypass Start-ScheduledTask -TaskName "Restart_DDX"
 ```
-Description:```Restart the DDX Router service if it detects a hang in file processing.```
+Description:
+```
+Restart the DDX Router service if it detects a hang in file processing.
+```
 
 I found by calling a Scheduled Task the user setup works much better.
 
