@@ -44,6 +44,18 @@ For more details regarding UserParameteres look at the Zabbix Documentation: htt
 
 If you want to make this process completely automated in the DDX restart there are some extra setup that needs to be done.
 
+First since Zabbix will need to be configured to exicute a script remotely you will need to make an exception for it it accually work:
+
+Zabbix Server Config File:
+```
+EnableGlobalScripts=1
+```
+
+Then on the Zabbix Agent:
+```
+AllowKey=system.run[powershell -NoProfile -ExecutionPolicy bypass Start-ScheduledTask -TaskName "Restart_DDX"]
+```
+
 Zabbix 7.0 Alerts/Scripts
 
 Create a new script with the following:
