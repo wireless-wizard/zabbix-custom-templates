@@ -15,7 +15,7 @@ If you wish to see new items added please open an issue @ [wireless-wizard/zabbi
 |Name|Description|Type|Key and additional info|
 |----|-----------|----|----|
 |Gethttpdata|<p>Pull the entire web page for processing.</p>|`HTTP agent`|Gethttpdata<p>Update: 5m</p>|
-|Altitude|<p>Altitude</p>|`Dependent item`|Altitude<p>Regular Expression:  <td class="label">Altitude<\/td>\s*<td class="data">([\d.]+)  \1</p>|
-|Barometer|<p>Barometer</p>|`Dependent item`|Barometer<p>Regular Expression:  <td class="label">Barometer<\/td>\s*<td class="data">([\d.]+)  \1</p>|
+|Altitude|<p>Altitude</p>|`Dependent item`|Altitude<p>Regular Expression:  `<td class="label">Altitude<\/td>\s*<td class="data">([\d.]+)`  \1</p>|
+|Barometer|<p>Barometer</p>|`Dependent item`|Barometer<p>Regular Expression:  `<td class="label">Barometer<\/td>\s*<td class="data">([\d.]+)`  \1</p>|
 
 
